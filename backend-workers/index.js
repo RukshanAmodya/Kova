@@ -16,8 +16,16 @@ export default {
     // Google Drive API URL
     const driveUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media&key=${API_KEY}`;
 
-    // Forward range requests and other headers
-    const response = await fetch(driveUrl, { headers: request.headers });
+    // Forward only range-related headers to Google Drive API (avoiding Host/Cookie mismatches)
+    const headers = new Headers();
+    if (request.headers.has('Range')) {
+      headers.set('Range', request.headers.get('Range'));
+    }
+    if (request.headers.has('If-Range')) {
+      headers.set('If-Range', request.headers.get('If-Range'));
+    }
+
+    const response = await fetch(driveUrl, { headers });
     const proxyResponse = new Response(response.body, response);
 
     // Delete Google specific headers to prevent exposing internal details
