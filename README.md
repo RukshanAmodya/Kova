@@ -1,3 +1,3 @@
-# Kova
+# Kova Backend Workers
 
-This repository contains the Kova project (KDrama).
+This is the backend workers service for the Kova project.
